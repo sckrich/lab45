@@ -1,0 +1,116 @@
+#include <iostream>       // Для работы с вводом/выводом (cin, cout)
+#include <cstdlib>        // Для стандартных функций C, таких как exit
+#include <unistd.h>       // Для системных вызовов UNIX (fork, getpid, sleep)
+#include <sys/wait.h>     // Для ожидания завершения дочерних процессов (waitpid)
+#include <random>         // Для генерации псевдослучайных чисел
+#include <sys/resource.h> // Для получения информации об использовании ресурсов процесса
+#include <chrono>         // Для работы с точным временем
+
+using namespace std;
+
+// Функция для получения объема используемой памяти процессом
+size_t get_memory(){
+    struct rusage usage; // Создаем структуру для хранения информации
+    getrusage(RUSAGE_SELF, &usage); // Заполняем структуру для текущего процесса
+    return usage.ru_maxrss; // Возвращаем максимальное использование памяти 
+}
+
+// Функция для генерации случайной строки указанной длины
+string generate_random_string(int length){
+
+    string charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    default_random_engine generator(time(nullptr)); // Генератор случайных чисел
+    uniform_int_distribution<int> distribution(0, charset.size() - 1); // Диапазон индексов для выборки из charset
+
+    string random_string; // Переменная для результата
+    for (int i = 0; i < length; ++i) {
+        random_string += charset[distribution(generator)]; // Генерируем строку
+    }
+    return random_string;
+}
+
+// Функция для получения текущего времени в формате Часы:Минуты:Секунды:Миллисек 
+string get_current_time_with_milliseconds() {
+    auto now = chrono::system_clock::now(); // Текущее время
+    auto current_time = chrono::system_clock::to_time_t(now); // Преобразуем в time_t
+    auto milliseconds = chrono::duration_cast<chrono::milliseconds>(now.time_since_epoch()) % 1000; // миллисекунды
+
+    char buffer[9]; // Буфер для строки времени 
+    strftime(buffer, sizeof(buffer), "%H:%M:%S", localtime(&current_time));
+
+    stringstream ss; // Используем stringstream для добавления миллисекунд
+    ss << buffer << ":" << setfill('0') << setw(3) << milliseconds.count();
+
+    return ss.str();
+}
+
+// Функция в каждом дочернем процессе
+void child_process(int N, int process_type) {
+    pid_t pid = getpid(); // Получаем PID текущего процесса
+
+    // Генератор случайных интервалов для пауз
+    default_random_engine generator(chrono::system_clock::now().time_since_epoch().count() * pid);
+    uniform_real_distribution<double> distribution(0.1, 8.0); // Интервалы от 0.1 до 8 секунд
+
+    for (int i = 1; i <= N; ++i) { // Выполняем цикл N раз
+        string current_time = get_current_time_with_milliseconds(); // Получаем текущее время 
+
+        cout << "PID: " << pid
+             << "\n\tВремя: " << current_time << endl;
+
+        if (process_type == 1)
+            cout << "\tPPID: " << getppid(); 
+
+        else if (process_type == 2)
+            cout << "\tПамять: " << get_memory() << " KB"; 
+
+        else if (process_type == 3)
+            cout << "\tСлучайная строка: " << generate_random_string(8); 
+        
+
+        cout << "\n\tИтерация: " << i << endl;
+
+        sleep(distribution(generator)); // Задержка на случайное время
+
+        cout << endl;
+    }
+    exit(N); // Завершаем процесс равный количеству итераций
+}
+
+int main() {
+    cout << "Введите число итераций (N): "; 
+    int N;
+    cin >> N;
+
+    const int num_children = 3; // Количество дочерних процессов
+    pid_t pids[num_children]; // Массив для хранения PID-ов дочерних процессов
+
+    for (int i = 0; i < num_children; ++i) {
+        pid_t pid = fork(); // Создаем новый процесс
+        if (pid < 0) { // Ошибка при fork
+            cerr << "Ошибка: не удалось создать процесс" << endl;
+            exit(1); 
+        }
+        else if (pid == 0) {
+            child_process(N, i + 1); // Дочерний процесс выполняет свою функцию
+        }
+        else {
+            pids[i] = pid; // Сохраняем PID дочернего процесса
+            cout << "---Запущен дочерний процесс N" << i + 1 << " с PID: " << pid << "---\n\n";
+        }
+    }
+    
+    for (int i = 0; i < num_children; ++i) {
+        int status;
+        pid_t child_pid = waitpid(pids[i], &status, 0); // Ожидаем завершения конкретного процесса
+
+        if (WIFEXITED(status)) { // Если процесс завершился нормально
+            cout << "Процесс " << child_pid << " завершился, код возврата: " << WEXITSTATUS(status) << endl;
+        }
+        else { // Если произошла ошибка
+            cerr << "Процесс " << child_pid << " завершился с ошибкой." << endl;
+        }
+    }
+    return 0; // Успешное завершение родительского процесса
+

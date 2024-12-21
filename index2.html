@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <title>Купить дом</title>
+<header>
+    
+    <div class ="logo"><p class = "logo_char">&#10033; Вариант 16</p></div>
+    <ul class="nav-link">
+        <li>
+            <a href = "#">О нас</a>
+        </li>
+        <li>
+            <a href = "#">Наши работы</a>
+        </li> 
+        <li>
+            <a href = "#">Контакты</a>
+        </li> 
+    </ul>
+    <link rel = "stylesheet" href = "style_index.css">
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
+    <script>
+    </script>
+    <style>
+        .preloader {
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: #e0e0e0;
+        z-index: 1001;
+        }
+
+        .preloader__row {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        width: 70px;
+        height: 70px;
+        margin-top: -35px;
+        margin-left: -35px;
+        text-align: center;
+        animation: preloader-rotate 2s infinite linear;
+        }
+
+        .preloader__item {
+        position: absolute;
+        display: inline-block;
+        top: 0;
+        background-color: #337ab7;
+        border-radius: 100%;
+        width: 35px;
+        height: 35px;
+        animation: preloader-bounce 2s infinite ease-in-out;
+        }
+
+        .preloader__item:last-child {
+        top: auto;
+        bottom: 0;
+        animation-delay: -1s;
+        }
+
+        @keyframes preloader-rotate {
+        100% {
+            transform: rotate(360deg);
+        }
+        }
+
+        @keyframes preloader-bounce {
+
+        0%,
+        100% {
+            transform: scale(0);
+        }
+
+        50% {
+            transform: scale(1);
+        }
+        }
+
+        .loaded_hiding .preloader {
+        transition: 0.3s opacity;
+        opacity: 0;
+        }
+
+        .loaded .preloader {
+        display: none;
+        }
+
+        .loaded_hiding .preloader {
+        transition: 0.3s opacity;
+        opacity: 0;
+        }
+
+        .loaded .preloader {
+        display: none;
+        }
+        </style>
+</header>
+<hr class="nav_hr"></hr>
+<body>
+    <div class = left_side>
+        <div class = "text">
+            <p class = "title">Выберите дом</p>
+            <span class = "gr_d">Многоквартирный</span>
+            <p class = "Description">Своя квартирка - "Суета в доме"</p>
+            <p class = "Sec_desc">Бюджетное жилье, которое подойдет для людей с ограниченным бюджетом или для временного проживания</p>
+            <div class = "forms">
+            <form action = "#">
+                <button class="js-open-modal">Купить этот</button>
+            </form>
+            <form action="index.html">
+                <button class = "gray_btn">Следующий</button>
+            </form>
+            </div>
+        </div>
+        <div class = "pichouse">
+            <div class="dropdown">
+                <button class="dropbtn">Показывать все <img class = "btn_img"></button>
+                <div class="dropdown-content">
+                  <a href="index2.html">Многоквартирный</a>
+                  <a href="index.html">Частный</a>
+                </div>
+                </div>
+            <img class = "img_house"src = "https://pro-dachnikov.com/uploads/posts/2021-10/1633740876_89-p-mnogoetazhnie-doma-foto-93.png" alt = "Здесь должно быть изображеине дома">
+        </div>
+    </div>    
+    <div class="preloader">
+        <div class="preloader__row">
+          <div class="preloader__item"></div>
+          <div class="preloader__item"></div>
+        </div>
+      </div>
+      <script>
+        window.onload = function () 
+        {
+          document.body.classList.add('loaded_hiding');
+          window.setTimeout(function () {
+            document.body.classList.add('loaded');
+            document.body.classList.remove('loaded_hiding');
+          }, 500);
+        }
+      </script>
+       
+    </body>
+<footer>
+    &copy; Вариант 16. Синюков Данила, группа АС-22-1 
+</footer>
+</html>

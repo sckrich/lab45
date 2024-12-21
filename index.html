@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <title>Купить дом</title>
+<header>
+    <script src = "script.js"></script>
+    <div class ="logo"><p class = "logo_char">&#10033; Вариант 16</p>
+    </div>
+    <ul class="nav-link">
+        <li>
+            <a href = "#">О нас</a>
+        </li>
+        <li>
+            <a href = "#">Наши работы</a>
+        </li> 
+        <li>
+            <a href = "#">Контакты</a>
+        </li> 
+    </ul>
+    <link rel = "stylesheet" href = "style_index.css">
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale=1">
+    <style>
+        .preloader {
+  
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #e0e0e0;
+   z-index: 1001;
+}
+
+.preloader__row {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  margin-top: -35px;
+  margin-left: -35px;
+  text-align: center;
+  animation: preloader-rotate 2s infinite linear;
+}
+
+.preloader__item {
+  position: absolute;
+  display: inline-block;
+  top: 0;
+  background-color: #337ab7;
+  border-radius: 100%;
+  width: 35px;
+  height: 35px;
+  animation: preloader-bounce 2s infinite ease-in-out;
+}
+
+.preloader__item:last-child {
+  top: auto;
+  bottom: 0;
+  animation-delay: -1s;
+}
+
+@keyframes preloader-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes preloader-bounce {
+
+  0%,
+  100% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+}
+
+.loaded_hiding .preloader {
+  transition: 0.3s opacity;
+  opacity: 0;
+}
+
+.loaded .preloader {
+  display: none;
+}
+/* Стили для подложки */
+
+.overlay {
+
+/* Скрываем подложку  */
+opacity: 0;
+visibility: hidden;
+
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, .5);
+z-index: 20;
+transition: .3s all;
+}
+
+
+/* Стили для модальных окон */
+
+.modal {
+
+/* Скрываем окна  */
+opacity: 0;
+visibility: hidden;
+
+
+/*  Установаем ширину окна  */
+width: 100%;
+max-width: 500px;
+
+/*  Центрируем и задаем z-index */
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+z-index: 30; /* Должен быть выше чем у подложки*/
+
+/*  Побочные стили   */
+box-shadow: 0 3px 10px -.5px rgba(0, 0, 0, .2);
+text-align: center;
+padding: 30px;
+border-radius: 3px;
+background-color: #fff;
+transition: 0.3s all;
+}
+
+.modal__cross {
+width: 15px;
+height: 15px;
+position: absolute;
+top: 20px;
+right: 20px;
+fill: #444;
+cursor: pointer;
+}
+    </style>
+</header>
+<hr class="nav_hr"></hr>
+<body>
+    <div class="modal" data-modal="1">
+        <svg class="modal__cross" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.954 21.03l-9.184-9.095 9.092-9.174-2.832-2.807-9.09 9.179-9.176-9.088-2.81 2.81 9.186 9.105-9.095 9.184 2.81 2.81 9.112-9.192 9.18 9.1z"/></svg>
+        <p class="modal__title">Заголовок окна 1</p>
+     </div>
+     <div class="overlay" id="overlay-modal"></div>
+    <div class = left_side>
+        <div class = "text">
+            <p class = "title">Выберите дом</p>
+            <span class = "gr_d">Частный</span>
+            <p class = "Description">Дом мечты - "Волшебство за городом"</p>
+            <p class = "Sec_desc">Жилье располагается в живописном и спокойном месте, где можно наслаждаться тишиной и гармонией с природой!</p>
+            <div class = "forms">
+            <form action="#">
+                <button class="js-open-modal">Купить этот</button>
+            </form>
+            <form action="index2.html">
+                <button class = "gray_btn" class="js-open-modal">Следующий</button>
+            </form>
+            </div>
+        </div>
+        <div class = "pichouse">
+            <div class="dropdown">
+                <button class="dropbtn">Показывать все <img class = "btn_img"></button>
+                <div class="dropdown-content">
+                  <a href="index2.html">Многоквартирный</a>
+                  <a href="index.html">Частный</a>
+                </div>
+            </div>
+            <img class = "img_house" src = "https://media.musely.com/u/8faf4d53-df58-4b04-ba25-ef21ed8c20b4.jpg" alt = "Здесь должно быть изображеине дома">
+        </div>
+    </div>
+    <div class="preloader">
+        <div class="preloader__row">
+          <div class="preloader__item"></div>
+          <div class="preloader__item"></div>
+        </div>
+      </div>
+      <script>
+        window.onload = function () {
+          document.body.classList.add('loaded_hiding');
+          window.setTimeout(function () {
+            document.body.classList.add('loaded');
+            document.body.classList.remove('loaded_hiding');
+          }, 500);
+        }
+      </script>
+        
+    </body>
+<footer>
+    &copy; Вариант 16. Синюков Данила, группа АС-22-1 
+</footer>
+</html>
